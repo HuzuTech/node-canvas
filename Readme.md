@@ -1,3 +1,50 @@
+# Raison d'être
+
+Modifications to facilitate installation on [Heroku](http://www.heroku.com)'s
+Cedar stack for [node.js](http://nodejs.org/) apps.
+
+I wanted to stick images together on a server using the same canvas code
+between client app and server app. This works nicely.
+
+## Use on Heroku
+
+Declare the dependency in your `package.json` file. For example:
+
+```json
+  {
+    "name": "my-awesome-app",
+    "version": "0.0.1",
+    "dependencies": {
+      "express": "2.2.0",
+      "canvas": "https://github.com/mnem/node-canvas/tarball/heroku"
+    }
+  }
+```
+
+Force libcairo to load when the app is run:
+
+```shell
+  heroku config:add LD_PRELOAD='/app/node_modules/canvas/cairo/libcairo.so.2.11000.2 /app/node_modules/canvas/cairo/libpixman-1.so.0.20.2' LD_LIBRARY_PATH='/app/node_modules/canvas/cairo'
+```
+
+## What I changed
+
+The main modification to this repository is that [Cairo](http://cairographics.org/)
+is supplied as a precompiled library. Many thanks to
+[jgreene](https://github.com/jgreene) and
+[elspoono](https://github.com/elspoono). This fork is based on their
+discussions on [issue 114](https://github.com/LearnBoost/node-canvas/issues/114)
+in the [node-canvas](https://github.com/LearnBoost/node-canvas) project.
+
+Go make awesome things.
+
+
+[mnem](http://noiseandheat.com)
+
+* * *
+
+Now to resume your original broadcast:
+
 # node-canvas
 
  Node canvas is a [Cairo](http://cairographics.org/) backed Canvas implementation for [NodeJS](http://nodejs.org).
