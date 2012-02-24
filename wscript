@@ -51,6 +51,7 @@ def configure(conf):
     ## get this check to work on Heroku
     #pkgconfig = 'PKG_CONFIG_PATH=%s pkg-config' % libcairo_pkgconfig
     #conf.check_cfg(package=os.path.join(libcairo_pkgconfig, 'cairo.pc'), args='--cflags --libs', mandatory=True, path=pkgconfig)
+    pass
   else:
     conf.check_cfg(package='cairo', args='--cflags --libs', mandatory=True)
 
