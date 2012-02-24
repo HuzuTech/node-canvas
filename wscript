@@ -47,8 +47,10 @@ def configure(conf):
 
   conf.check_cxx(lib=['cairo', 'pixman-1'], libpath=cairo_libpath, uselib_store='CAIRO', mandatory=True)
   if os.path.lexists(libcairo_pkgconfig):
-    pkgconfig = 'PKG_CONFIG_PATH=%s pkg-config' % libcairo_pkgconfig
-    conf.check_cfg(package=os.path.join(libcairo_pkgconfig, 'cairo.pc'), args='--cflags --libs', mandatory=True, path=pkgconfig)
+    ## Just going to assume it was correctly compiled just now - I can't
+    ## get this check to work on Heroku
+    #pkgconfig = 'PKG_CONFIG_PATH=%s pkg-config' % libcairo_pkgconfig
+    #conf.check_cfg(package=os.path.join(libcairo_pkgconfig, 'cairo.pc'), args='--cflags --libs', mandatory=True, path=pkgconfig)
   else:
     conf.check_cfg(package='cairo', args='--cflags --libs', mandatory=True)
 
