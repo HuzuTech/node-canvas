@@ -1,4 +1,3 @@
-
 import glob
 import Options
 import Utils
@@ -45,12 +44,11 @@ def configure(conf):
 
   if os.path.lexists(libcairo_include):
     conf.env.CAIRO_INCLUDES = libcairo_include
-  # End hackery
 
-  conf.check(lib='pixman-1', libpath=cairo_libpath, uselib_store='PIXMAN', mandatory=True)
-  conf.check(lib='cairo', libpath=cairo_libpath, uselib_store='CAIRO', mandatory=True)
+  conf.check_cxx(lib=['cairo', 'pixman-1'], libpath=cairo_libpath, uselib_store='CAIRO', mandatory=True)
   if os.path.lexists(libcairo_pkgconfig):
-    conf.check_cfg(package='cairo', args='--cflags --libs', mandatory=True, path=libcairo_pkgconfig)
+    pkgconfig = 'PKG_CONFIG_PATH=%s pkg-config' % libcairo_pkgconfig
+    conf.check_cfg(package=os.path.join(libcairo_pkgconfig, 'cairo.pc'), args='--cflags --libs', mandatory=True, path=pkgconfig)
   else:
     conf.check_cfg(package='cairo', args='--cflags --libs', mandatory=True)
 
@@ -64,4 +62,4 @@ def build(bld):
   obj.source = bld.glob('src/*.cc')
   obj.uselib = ['CAIRO', 'GIF', 'JPEG', 'PIXMAN']
   if 'CAIRO_INCLUDES' in obj.env:
-    obj.include = obj.env.CAIRO_INCLUDES
+    obj.includes = obj.env.CAIRO_INCLUDES
