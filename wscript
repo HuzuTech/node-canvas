@@ -2,7 +2,8 @@
 import glob
 import Options
 import Utils
-from TaskGen import feature, after, before
+import os
+import sys
 
 srcdir = '.'
 blddir = 'build'
@@ -29,25 +30,36 @@ def configure(conf):
     conf.env.append_value('CXXFLAGS', ['-pg'])
     conf.env.append_value('LINKFLAGS', ['-pg'])
 
-  #conf.check_cfg(package='cairo', args='--cflags --libs', mandatory=True)
+  libpath = ['/lib', '/usr/lib', '/usr/local/lib', '/opt/local/lib', '/usr/X11/lib']
+
+  # Some hackery to allow pre-compiled cairo binaries to be supplied for
+  # platforms where it is necessary to do so
+  sysname, nodename, release, version, machine = os.uname()
+  libcairo_overrides = os.path.join(conf.cwd, 'cairo', sysname, nodename, machine)
+
+  libcairo_libpath = os.path.join(libcairo_overrides, 'lib')
+  libcairo_include = os.path.join(libcairo_overrides, 'include')
+  libcairo_pkgconfig = os.path.join(libcairo_overrides, 'pkgconfig')
+
+  if os.path.lexists(libcairo_libpath):
+    libpaths.append(libcairo_libpath)
+
+  if os.path.lexists(libcairo_include):
+    conf.env.CAIRO_INCLUDES = libcairo_include
+  # End hackery
+
+  conf.check(lib='cairo', libpath=libpath, uselib_store='CAIRO', mandatory=True)
+  if os.path.lexists(libcairo_pkgconfig):
+    conf.check_cfg(package='cairo', args='--cflags --libs', mandatory=True, path=libcairo_pkgconfig)
+  else:
+    conf.check_cfg(package='cairo', args='--cflags --libs', mandatory=True)
+
   flags = ['-O3', '-Wall', '-D_FILE_OFFSET_BITS=64', '-D_LARGEFILE_SOURCE']
   conf.env.append_value('CCFLAGS', flags)
   conf.env.append_value('CXXFLAGS', flags)
-
-@feature('cxx')
-@after('apply_link')
-def apply_add_precompiled(tgen):
-  if hasattr(tgen, 'add_precompiled'):
-    for i in Utils.to_list(tgen.add_precompiled):
-      input_node = tgen.bld.srcnode.find_resource(i)
-      tgen.link_task.inputs.append(input_node)
 
 def build(bld):
   obj = bld.new_task_gen('cxx', 'shlib', 'node_addon')
   obj.target = 'canvas'
   obj.source = bld.glob('src/*.cc')
-  obj.uselib = ['GIF', 'JPEG']
-
-  obj.includes = 'cairo'
-  obj.add_precompiled = ['cairo/libcairo.so']
-
+  obj.uselib = ['CAIRO', 'GIF', 'JPEG']
