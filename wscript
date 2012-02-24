@@ -3,7 +3,6 @@ import glob
 import Options
 import Utils
 import os
-import sys
 
 srcdir = '.'
 blddir = 'build'
