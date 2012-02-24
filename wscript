@@ -33,7 +33,7 @@ def configure(conf):
   cairo_libpath = ['/lib', '/usr/lib', '/usr/local/lib', '/opt/local/lib', '/usr/X11/lib']
 
   sysname, nodename, release, version, machine = os.uname()
-  libcairo_overrides = os.path.join(conf.cwd, 'cairo', sysname, nodename, machine)
+  libcairo_overrides = os.path.join(conf.cwd, 'cairo', sysname, machine)
 
   libcairo_path = os.path.join(libcairo_overrides, 'lib')
   libcairo_include = os.path.join(libcairo_overrides, 'include')

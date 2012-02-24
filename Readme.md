@@ -24,7 +24,7 @@ Declare the dependency in your `package.json` file. For example:
 Force libcairo to load when the app is run:
 
 ```shell
-  heroku config:add LD_PRELOAD='/app/node_modules/canvas/cairo/libcairo.so.2.11000.2 /app/node_modules/canvas/cairo/libpixman-1.so.0.20.2' LD_LIBRARY_PATH='/app/node_modules/canvas/cairo'
+  heroku config:add LD_PRELOAD='$/app/node_modules/canvas/cairo/Linux/x86_64/lib/libcairo.so $/app/node_modules/canvas/cairo/Linux/x86_64/lib/libpixman-1.so'
 ```
 
 ## What I changed
