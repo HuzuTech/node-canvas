@@ -29,25 +29,25 @@ def configure(conf):
     conf.env.append_value('CXXFLAGS', ['-pg'])
     conf.env.append_value('LINKFLAGS', ['-pg'])
 
-  libpath = ['/lib', '/usr/lib', '/usr/local/lib', '/opt/local/lib', '/usr/X11/lib']
-
   # Some hackery to allow pre-compiled cairo binaries to be supplied for
   # platforms where it is necessary to do so
+  cairo_libpath = ['/lib', '/usr/lib', '/usr/local/lib', '/opt/local/lib', '/usr/X11/lib']
+
   sysname, nodename, release, version, machine = os.uname()
   libcairo_overrides = os.path.join(conf.cwd, 'cairo', sysname, nodename, machine)
 
-  libcairo_libpath = os.path.join(libcairo_overrides, 'lib')
+  libcairo_path = os.path.join(libcairo_overrides, 'lib')
   libcairo_include = os.path.join(libcairo_overrides, 'include')
   libcairo_pkgconfig = os.path.join(libcairo_overrides, 'pkgconfig')
 
-  if os.path.lexists(libcairo_libpath):
-    libpaths.append(libcairo_libpath)
+  if os.path.lexists(libcairo_path):
+    cairo_libpath.append(libcairo_path)
 
   if os.path.lexists(libcairo_include):
     conf.env.CAIRO_INCLUDES = libcairo_include
   # End hackery
 
-  conf.check(lib='cairo', libpath=libpath, uselib_store='CAIRO', mandatory=True)
+  conf.check(lib='cairo', libpath=cairo_libpath, uselib_store='CAIRO', mandatory=True)
   if os.path.lexists(libcairo_pkgconfig):
     conf.check_cfg(package='cairo', args='--cflags --libs', mandatory=True, path=libcairo_pkgconfig)
   else:
