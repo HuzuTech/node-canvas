@@ -47,6 +47,7 @@ def configure(conf):
     conf.env.CAIRO_INCLUDES = libcairo_include
   # End hackery
 
+  conf.check(lib='pixman-1', libpath=cairo_libpath, uselib_store='PIXMAN', mandatory=True)
   conf.check(lib='cairo', libpath=cairo_libpath, uselib_store='CAIRO', mandatory=True)
   if os.path.lexists(libcairo_pkgconfig):
     conf.check_cfg(package='cairo', args='--cflags --libs', mandatory=True, path=libcairo_pkgconfig)
@@ -61,4 +62,6 @@ def build(bld):
   obj = bld.new_task_gen('cxx', 'shlib', 'node_addon')
   obj.target = 'canvas'
   obj.source = bld.glob('src/*.cc')
-  obj.uselib = ['CAIRO', 'GIF', 'JPEG']
+  obj.uselib = ['CAIRO', 'GIF', 'JPEG', 'PIXMAN']
+  if 'CAIRO_INCLUDES' in obj.env:
+    obj.include = obj.env.CAIRO_INCLUDES
