@@ -1,5 +1,5 @@
-{  "name": "canvas-with-cairo"
- , "description":  "Canvas graphics API backed by Cairo. Cairo is installed as a local library in a subfolder of the canvas module.."
+{  "name": "canvas-and-cairo"
+ , "description":  "Canvas graphics API backed by Cairo. Cairo is installed as a local library in a subfolder of the canvas module."
  , "version":  "0.10.3"
  , "author": "TJ Holowaychuk <tj@learnboost.com>"
  , "contributors": ["David Wagner <mnem@noiseandheat.com> (http://noiseandheat.com/)"]
