@@ -7,7 +7,7 @@
  , "homepage": "https://github.com/mnem/node-canvas"
  , "repository": "git://github.com/mnem/node-canvas"
  , "scripts": {
-   "preinstall": "export PKG_CONFIG_PATH=`pwd`/local/lib/pkgconfig && ./install `pwd`/local && node-waf configure build"
+   "preinstall": "./install-cairo-locally-and-build-canvas.sh"
  }
  , "devDependencies": {
      "express": ">= 2.3.7 && < 3.0.0"
