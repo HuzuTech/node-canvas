@@ -8,6 +8,7 @@ testing
 test.png
 .pomo
 node_modules
+local/
 
 # Vim cruft
 *.swp
